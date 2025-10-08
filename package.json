@@ -1,0 +1,18 @@
+{
+  "name": "islam-central",
+  "packageManager": "yarn@4.10.2",
+  "author": "Kasra Alizadeh",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "format": "turbo run format",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
