@@ -8,3 +8,4 @@ authors.workspace = true
 serde.workspace = true
 tokio.workspace = true
 general.workspace = true
+axum.workspace = true
