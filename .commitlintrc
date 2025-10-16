@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "@commitlint/config-conventional"
+  ],
+  "prompt": {
+    "scopes": [
+      "external",
+      "general",
+      "internal"
+    ]
+  }
+}
