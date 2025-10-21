@@ -1,8 +1,13 @@
-import * as path from 'path';
-import { Pool, PoolConfig } from 'pg';
 import { promises as fs } from 'fs';
-import { Kysely, Migrator, PostgresDialect, FileMigrationProvider } from 'kysely';
+import * as path from 'path';
 import { Logger } from '@nestjs/common';
+import {
+  FileMigrationProvider,
+  Kysely,
+  Migrator,
+  PostgresDialect,
+} from 'kysely';
+import { Pool, PoolConfig } from 'pg';
 
 export class DatabaseMigrator {
   private database: Kysely<any>;
@@ -35,9 +40,13 @@ export class DatabaseMigrator {
 
       results?.forEach((it) => {
         if (it.status === 'Success') {
-          this.logger.log(`Migration "${it.migrationName}" was executed successfully.`);
+          this.logger.log(
+            `Migration "${it.migrationName}" was executed successfully.`,
+          );
         } else if (it.status === 'Error') {
-          this.logger.error(`Failed to execute migration "${it.migrationName}".`);
+          this.logger.error(
+            `Failed to execute migration "${it.migrationName}".`,
+          );
         }
       });
 
@@ -47,7 +56,7 @@ export class DatabaseMigrator {
       }
       this.logger.log('All migrations executed successfully.');
     } catch (err) {
-      this.logger.error('An unexpected error occurred during migration.', err.stack || err);
+      this.logger.error('An unexpected error occurred during migration.', err);
       throw err;
     }
   }
@@ -55,7 +64,10 @@ export class DatabaseMigrator {
   async Down() {
     try {
       await this.migrator.migrateDown();
-    } catch (error) {}
+    } catch (err) {
+      this.logger.error('An unexpected error occurred during migration.', err);
+      throw err;
+    }
   }
 
   async destroy() {

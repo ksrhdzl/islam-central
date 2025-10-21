@@ -1,28 +1,26 @@
 import { Logger, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { DataSourceOptions } from 'typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { PostgresDialect } from 'kysely';
+import { Pool } from 'pg';
+
+import { KyselyModule } from '../kysely';
 import { DatabaseService } from './database.service';
 import { DatabaseMigrator } from './utilities';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
+    KyselyModule.forRootAsync({
+      isGlobal: true,
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          schema: 'public',
-          type: 'postgres',
-          url: configService.get<string>('POSTGRES'),
-          // host: configService.get<string>('POSTGRES_HOST'),
-          // port: configService.get<number>('POSTGRES_PORT'),
-          // user: configService.get<string>('POSTGRES_USER'),
-          // password: configService.get<string>('POSTGRES_PASSWORD'),
-          // database: configService.get<string>('POSTGRES_DB'),
-          entities: [`${__dirname}/entities/**/*.entity.{js,ts}`],
-          subscribers: [`${__dirname}/subscribers/**/*.subscriber.{js,ts}`],
-          logging: configService.get<string>('NODE_ENV') !== 'production',
-        } as DataSourceOptions;
+          dialect: new PostgresDialect({
+            pool: new Pool({
+              connectionString:
+                configService.getOrThrow<string>('POSTGRES_URL'),
+            }),
+          }),
+        };
       },
     }),
   ],
@@ -31,11 +29,7 @@ import { DatabaseMigrator } from './utilities';
       provide: DatabaseMigrator,
       useFactory: (configService: ConfigService) => {
         return new DatabaseMigrator({
-          host: configService.get<string>('POSTGRES_HOST'),
-          port: configService.get<number>('POSTGRES_PORT'),
-          user: configService.get<string>('POSTGRES_USER'),
-          password: configService.get<string>('POSTGRES_PASSWORD'),
-          database: configService.get<string>('POSTGRES_DB'),
+          connectionString: configService.getOrThrow<string>('POSTGRES_URL'),
         });
       },
       inject: [ConfigService],
@@ -51,37 +45,9 @@ export class DatabaseModule implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
-      await this.databaseMigrator.Down();
       await this.databaseMigrator.Latest();
     } catch (error) {
-      this.logger.error('Error during migrations:', error.stack || error);
+      this.logger.error('Error during migrations:', error);
     } finally {
       await this.databaseMigrator.destroy();
     }

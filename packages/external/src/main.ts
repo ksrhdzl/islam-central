@@ -6,12 +6,12 @@ import {
   NestExpressApplication,
 } from '@nestjs/platform-express';
 
-import { AppModule } from './app.module';
+import { MainModule } from './main.module';
 
 void (async (): Promise<void> => {
   const adapter = new ExpressAdapter();
   const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,
+    MainModule,
     adapter,
   );
 

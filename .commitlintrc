@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "@commitlint/config-conventional"
+  ],
+  "prompt": {
+    "scopes": [
+      "general",
+      "gateway",
+      "service"
+    ]
+  }
+}

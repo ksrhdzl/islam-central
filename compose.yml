@@ -98,4 +98,4 @@ services:
 # ---------------------------------NETWORKS
 networks:
   default:
-    name: team
+    name: islam

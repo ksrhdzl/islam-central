@@ -1,27 +1,22 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Dependencies
-node_modules
-.pnp
+# dependencies
+/node_modules
+/.pnp
 .pnp.*
 
-# Local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# env files
+.env*
+!.env.template
 
-# Testing
-coverage
+# testing
+/coverage
 
-# Turbo
+# outputs
+dist
 .turbo
 
-# Build Outputs
-dist
-
-# Package Manager
+# package manager
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -30,11 +25,13 @@ dist
 !.yarn/versions
 #!.yarn/cache
 
-# Debug
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# Misc
+# misc
 .DS_Store
 *.pem
+.temporary

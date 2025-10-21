@@ -13,15 +13,15 @@ on:
       - "main"
     paths:
       - "packages/external/**"
-  # workflow_run:
-  #   workflows: [common]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [general]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   audit:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
