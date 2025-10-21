@@ -1,0 +1,101 @@
+services:
+  # ---------------------------------
+  nats:
+    container_name: nats
+    image: nats:alpine
+    ports:
+      - "8222:8222"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=default
+    networks:
+      - default
+    volumes:
+      - ./infrastructure/compose/.temporary/postgres:/var/lib/postgresql
+
+  redis:
+    container_name: redis
+    image: redis:7.2-alpine
+    restart: always
+    networks:
+      - default
+    command: redis-server --loglevel warning
+    volumes:
+      - ./infrastructure/compose/.temporary/redis:/data
+
+  # ---------------------------------EXTERNAL
+  external:
+    container_name: external
+    build:
+      context: .
+      dockerfile: ./packages/external/dockerfile.dev
+      args:
+        - NAME=external
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./packages/external
+          target: /usr/src/app/packages/external
+        - action: rebuild
+          path: ./packages/external/package.json
+        - action: rebuild
+          path: ./packages/general
+          target: /usr/src/app/packages/general
+        - action: rebuild
+          path: ./package.json
+    env_file:
+      - path: ./.env
+        required: true
+      - path: ./packages/external/.env
+        required: true
+    command: ["/bin/sh", "-c", "yarn dev"]
+    depends_on:
+      - nats
+      - postgres
+      - redis
+
+  # ---------------------------------INTERNAL
+  internal:
+    container_name: internal
+    build:
+      context: .
+      dockerfile: ./packages/internal/dockerfile.dev
+      args:
+        - NAME=internal
+    ports:
+      - "4000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./packages/internal
+          target: /usr/src/app/packages/internal
+        - action: rebuild
+          path: ./packages/internal/package.json
+        - action: rebuild
+          path: ./packages/general
+          target: /usr/src/app/packages/general
+        - action: rebuild
+          path: ./package.json
+    env_file:
+      - path: ./.env
+        required: true
+      - path: ./packages/internal/.env
+        required: true
+    command: ["/bin/sh", "-c", "yarn dev"]
+    depends_on:
+      - nats
+      - postgres
+      - redis
+
+# ---------------------------------NETWORKS
+networks:
+  default:
+    name: islam

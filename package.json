@@ -1,0 +1,25 @@
+{
+  "name": "islam-central",
+  "packageManager": "yarn@4.10.3",
+  "author": "Kasra Alizadeh",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "format": "turbo run format",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.29.7",
+    "@commitlint/cli": "20.1.0",
+    "@commitlint/config-conventional": "20.0.0",
+    "@commitlint/types": "20.0.0",
+    "husky": "9.1.7",
+    "turbo": "latest"
+  }
+}
