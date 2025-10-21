@@ -46,8 +46,8 @@ jobs:
       - name: Install
         uses: ./.github/actions/install
 
-      - name: Build Common
-        run: yarn workspace common run build
+      - name: Build General
+        run: yarn workspace general run build
 
       - name: Run lint
         run: yarn workspace ${{github.workflow}} run lint
