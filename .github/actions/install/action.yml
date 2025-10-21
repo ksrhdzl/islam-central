@@ -14,15 +14,10 @@ runs:
       shell: bash
       run: corepack enable
 
-    - name: Get cache directory
-      shell: bash
-      run: |
-        echo "CACHE_DIR=$(yarn config get cacheFolder)" >> $GITHUB_ENV
-
     - name: Setup cache
       uses: actions/cache@v4
       with:
-        path: ${{ env.CACHE_DIR }}
+        path: .yarn/cache
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '**/.yarnrc.yml') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
