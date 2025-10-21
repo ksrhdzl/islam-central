@@ -25,8 +25,8 @@ COPY --from=installer --chown=world:hello /usr/src/app/node_modules ./node_modul
 COPY --from=installer --chown=world:hello /usr/src/app/package.json ./package.json
 COPY --from=installer --chown=world:hello /usr/src/app/yarn.lock ./yarn.lock
 
-COPY --from=installer --chown=world:hello /usr/src/app/packages/common/dist ./packages/common/dist
-COPY --from=installer --chown=world:hello /usr/src/app/packages/common/package.json ./packages/common/package.json
+COPY --from=installer --chown=world:hello /usr/src/app/packages/general/dist ./packages/general/dist
+COPY --from=installer --chown=world:hello /usr/src/app/packages/general/package.json ./packages/general/package.json
 
 COPY --from=installer --chown=world:hello /usr/src/app/packages/external/dist ./packages/external/dist
 COPY --from=installer --chown=world:hello /usr/src/app/packages/external/package.json ./packages/external/package.json
