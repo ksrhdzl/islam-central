@@ -5,8 +5,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prebuild": "yarn run clean",
-    "build": "yarn run prebuild && tsc --build tsconfig.json --verbose",
+    "build": "yarn run prebuild && tsc -p tsconfig.json",
     "clean": "rm -rf dist",
+    "dev": "tsc -p tsconfig.json --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --fix \"src/**/*.ts\""
   },
